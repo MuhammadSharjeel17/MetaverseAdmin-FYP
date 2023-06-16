@@ -6,6 +6,7 @@ import {useState,useEffect} from 'react';
 import  {useNavigate, useParams} from 'react-router-dom'
 import Modal from './ModalViewInstallment';
 import {baseURL} from '../../apis/baseurl';
+import { Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import ReactPaginate from 'react-paginate';
 // const itemsPerPage = 3;
@@ -105,8 +106,8 @@ function ViewAboutus(currentItems)  {
             <th class="p-3 text-sm font-semibold tracking-wide"> Full Name </th>
             <th class="p-3 text-sm font-semibold tracking-wide"> Email </th>
             <th class="p-3 text-sm font-semibold tracking-wide"> Message </th>
-            {/* <th class="p-3 text-sm font-semibold tracking-wide"> Preparation Time </th>
-            <th class="p-3 text-sm font-semibold tracking-wide"> Servings</th> */}
+            <th class="p-3 text-sm font-semibold tracking-wide"> Contact No </th>
+            {/* <th class="p-3 text-sm font-semibold tracking-wide"> Servings</th>  */}
             
             <th class="p-3 text-sm font-semibold tracking-wide"> </th>
             <th class="p-3 text-sm font-semibold tracking-wide"> </th>
@@ -118,21 +119,30 @@ function ViewAboutus(currentItems)  {
           if(search=="" || search==null || search==undefined){
             return element
           }
-          else if((element.title.includes(search))){
+          else if((element.email.includes(search))){
             return element
           }
-          return search==="" ? element : element.title.includes(search);
+          return search==="" ? element : element.email.includes(search);
         }).map((element ,index)=>{  
 return (
           <tr class="bg-white border border-gray-300" key={index}>
              <td className='p-3 text-sm text-gray-700'>{index+1}. </td>
-            {/* <td className='p-3 text-sm text-gray-700'>{element.title} </td> */}
+            {/* <td className='p-3 text-sm text-gray-700'>{element.email} </td> */}
            
             {/* <td className='p-3 text-sm text-gray-700'> {element.regNo} </td> */}
             <td className='p-3 text-sm text-gray-700'> {element ? element.Name: ""} </td>
             <td className='p-3 text-sm text-gray-700'> {element ?element.email : ""} </td>
             <td className='p-3 text-sm text-gray-700'> {element ?element.message : ""} </td>
-            {/* <td className='p-3 text-sm text-gray-700'> {element.serving} </td> */}
+            <td className='p-3 text-sm text-gray-700'> {element.phoneNumber} </td>
+            <button
+   className="bg-red-500 text-white rounded-lg px-4 py-2 shadow-md hover:bg-red-600"
+    onClick={() => {
+      window.location.href = `mailto:${element.email}`;
+    }}
+  >
+    Send Email
+  </button>
+
 
           {/* {
             element.totalNoOfInstallment.map((x)=>(

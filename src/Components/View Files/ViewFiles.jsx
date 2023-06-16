@@ -54,6 +54,28 @@ function ViewFiles(currentItems)  {
     data();
   }, []);
  
+  const handleDelete = async (id, index) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        const { data } = await axios.delete(
+          `${baseURL}/api/product/deleteproduct/${id}`
+        );
+        console.log("previewdata", data);
+        if (data.status === true) {
+          axios.get(`${baseURL}/api/product/getproducts`).then((response) => {
+            if (response.status === 200) {
+              setData(response.data);
+              alert(data.message);
+            }
+          });
+        } else {
+          console.log(data);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   
   // useEffect(()=>
   // {
@@ -144,38 +166,15 @@ return (
             <td className='p-3 text-sm text-gray-700'>
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded" onClick={()=>navigate( `/update/${element._id} `)}>Update</button>
             </td>
-            <td className='p-3 text-sm text-gray-700'>
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded" onClick={
-              ()=>{
-                selectDeleted(element._id)
-              
-                
-                    try{
-                    async function deletedProduct(){
-             const {data}   =   await  axios.delete(`${baseURL}/api/product/deleteproduct/${element._id}`);
-              if(data.status === true){
-                await fetch(`${baseURL}/api/product/getproducts`);
-                alert(data.message);
-                
-              }
-              else{
-                console.log(data);
-              }
-                    }
-                  deletedProduct();
-                    } 
-                 
-                  catch(err){
-                    console.log(err);
-                  }
-                  
-                   
-                 
-                 
-                
-                
-                }}>Delete</button>
-            </td>
+            <td className="p-3 text-sm text-gray-700">
+            <button
+        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
+        onClick={() => handleDelete(element._id, index)}
+      >
+        Delete
+      </button>
+</td>
+
             
           </tr>
 
@@ -183,41 +182,12 @@ return (
         </tbody>
         </table>
        </div>
-      
-      
-   
     </div>
   )
 }
 const PaginatedItemss=({itemsPerPage})=> {
   const [datasss,setData] =useState([]);
   const [itemOffset, setItemOffset] = useState(0);
-  useEffect( () => {
-    async function data(){
-  //  await axios.get("http://localhost:5000/api/v1/plot/getplot")
-  await fetch(`${baseURL}/api/recipes/getrecipes`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `This is an HTTP error: The status is ${response.status}`
-          );
-        }
-        return response.json();
-      })
-      .then((actualData) =>{
-        if(actualData!== [] || ""){
-        setData(actualData);
-        console.log("Plots Details",actualData)
-        }
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-      // setData(actualData)
-    }
-    data();
-  }, []);
-  
   
   const endOffset = itemOffset + itemsPerPage;
   console.log(`Loading items from ${itemOffset} to ${endOffset}`);
